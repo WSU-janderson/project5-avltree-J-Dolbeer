@@ -154,3 +154,18 @@ std::optional<size_t> AVLTree::get(AVLNode* current, const std::string& key) con
         return get(current->right, key);
     }
 }
+
+size_t& AVLTree::operator[](const std::string& key) {
+    return operatorHelper(root, key);
+}
+
+size_t& AVLTree::operatorHelper(AVLNode*& current, const std::string& key) {
+    if (key == current->key) {
+        return current->value;
+    } else if (key < current->key) {
+        return operatorHelper(current->left, key);
+    } else if (key > current->key) {
+        return operatorHelper(current->right, key);
+    }
+}
+

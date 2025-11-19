@@ -69,26 +69,53 @@ bool AVLTree::insert(const std::string& key, size_t value) {
     return insert(root, key, value);
 }
 
-bool AVLTree::insert(AVLNode*& node, const std::string& key, size_t value) {
+bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value) {
     //If node does not exist, create it
-    if (!node) {
-        node = new AVLNode{key, value, 1, nullptr, nullptr};
+    if (!current) {
+        current = new AVLNode{key, value, 1, nullptr, nullptr};
         return true;
     }
 
     bool inserted = false;
-    if (key < node->key) { //Create left child
-        inserted = insert(node->left, key, value);
-    } else if (key > node->key) { //Create right child
-        inserted = insert(node->right, key, value);
+    if (key < current->key) { //Create left child
+        inserted = insert(current->left, key, value);
+    } else if (key > current->key) { //Create right child
+        inserted = insert(current->right, key, value);
     } else { //Node already exists
         return false;
     }
 
     if (inserted) {//Get height and balance tree
-        node->height = node->getHeight();
-        balanceNode(node);
+        current->height = current->getHeight();
+        balanceNode(current);
     }
 
     return inserted;
+}
+
+bool AVLTree::remove(const std::string& key) {
+    return remove(root, key);
+}
+
+bool AVLTree::remove(AVLNode*& current, KeyType key) {
+    //If node does not exist, return false
+    if (!current) {
+        return false;
+    }
+
+    bool removed = false;
+    if (key < current->key) {//Go to left
+        removed = remove(current->left, key);
+    } else if (key > current->key) {//Go to right
+        removed = remove(current->right, key);
+    } else {//Remove current node
+        removed = removeNode(current);
+    }
+
+    if (removed) {
+        current->height = current->getHeight();
+        balanceNode(current);
+    }
+
+    return removed;
 }

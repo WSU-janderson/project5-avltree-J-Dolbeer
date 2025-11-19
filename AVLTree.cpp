@@ -64,3 +64,31 @@ bool AVLTree::remove(AVLNode *&current, KeyType key) {
 
 void AVLTree::balanceNode(AVLNode *&node) {
 }
+
+bool AVLTree::insert(const std::string& key, size_t value) {
+    return insert(root, key, value);
+}
+
+bool AVLTree::insert(AVLNode*& node, const std::string& key, size_t value) {
+    //If node does not exist, create it
+    if (!node) {
+        node = new AVLNode{key, value, 1, nullptr, nullptr};
+        return true;
+    }
+
+    bool inserted = false;
+    if (key < node->key) { //Create left child
+        inserted = insert(node->left, key, value);
+    } else if (key > node->key) { //Create right child
+        inserted = insert(node->right, key, value);
+    } else { //Node already exists
+        return false;
+    }
+
+    if (inserted) {//Get height and balance tree
+        node->height = node->getHeight();
+        balanceNode(node);
+    }
+
+    return inserted;
+}

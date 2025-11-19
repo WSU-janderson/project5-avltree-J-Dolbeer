@@ -5,6 +5,9 @@
 #ifndef AVLTREE_H
 #define AVLTREE_H
 #include <string>
+#include <optional>
+#include <vector>
+
 
 using namespace std;
 
@@ -35,8 +38,19 @@ protected:
 
 public:
 
-
-
+bool AVLTree::insert(const std::string& key, size_t value);
+bool AVLTree::remove(const std::string& key);
+bool AVLTree::contains(const std::string& key) const;
+std::optional<size_t> AVLTree::get(const std::string& key) const;
+size_t& AVLTree::operator[](const std::string& key);
+vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const;
+std::vector<std::string> AVLTree::keys() const;
+size_t AVLTree::size() const;
+size_t AVLTree::getHeight() const;
+AVLTree::AVLTree(const AVLTree& other);
+void AVLTree::operator=(const AVLTree& other);
+AVLTree::~AVLTree();
+friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
 
     private:
     AVLNode* root;
@@ -48,6 +62,8 @@ public:
     bool removeNode(AVLNode*& current);
     // You will implement this, but it is needed for removeNode()
     void balanceNode(AVLNode*& node);
+
+    bool AVLTree::insert(AVLNode*& node, const std::string& key, size_t value);
 
 };
 

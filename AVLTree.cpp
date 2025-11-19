@@ -160,12 +160,39 @@ size_t& AVLTree::operator[](const std::string& key) {
 }
 
 size_t& AVLTree::operatorHelper(AVLNode*& current, const std::string& key) {
-    if (key == current->key) {
+    if (key == current->key) {//Return value of current node
         return current->value;
-    } else if (key < current->key) {
+    } else if (key < current->key) {//Go left
         return operatorHelper(current->left, key);
-    } else if (key > current->key) {
+    } else if (key > current->key) {//Go right
         return operatorHelper(current->right, key);
     }
+}
+
+vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::string& highKey) const {
+    return findRange(root, lowKey, highKey);
+}
+
+vector<std::string> AVLTree::findRange(AVLNode* current, const std::string& lowKey, const std::string& highKey) const {
+    vector<std::string> keys;
+    if (!current) {//If node does not exist, return empty vector
+        return keys;
+    }
+
+    if (current->key > lowKey) {//Go left
+        vector<std::string> keysToLeft = findRange(current->left, lowKey, highKey);
+        keys.insert(keys.end(), keysToLeft.begin(), keysToLeft.end());
+    }
+
+    if (current->key >= lowKey && current->key <= highKey) {//Add current key
+        keys.push_back(current->key);
+    }
+
+    if (current->key < highKey) {//Go right
+        vector<std::string> keysToRight = findRange(current->right, lowKey, highKey);
+        keys.insert(keys.end(), keysToRight.begin(), keysToRight.end());
+    }
+
+    return keys;
 }
 

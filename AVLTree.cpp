@@ -112,7 +112,7 @@ bool AVLTree::remove(AVLNode*& current, KeyType key) {
         removed = removeNode(current);
     }
 
-    if (removed) {
+    if (removed) {//Get height and balance tree
         current->height = current->getHeight();
         balanceNode(current);
     }
@@ -125,14 +125,32 @@ bool AVLTree::contains(const std::string& key) const {
 }
 
 bool AVLTree::contains(AVLNode* current, const std::string& key) const {
-    if (!current) {
+    if (!current) {//If not found, return false
         return false;
     }
-    if (key == current->key) {
+    if (key == current->key) {//Return current node
         return true;
-    } else if (key < current->key) {
+    } else if (key < current->key) {//Go left
         return contains(current->left, key);
-    } else if (key > current-> key){
+    } else if (key > current-> key){//Go right
         return contains(current->right, key);
+    }
+}
+
+std::optional<size_t> AVLTree::get(const std::string& key) const {
+    return get(root, key);
+}
+
+std::optional<size_t> AVLTree::get(AVLNode* current, const std::string& key) const {
+    if (!current) {//If not found, return std::nullopt
+        return std::nullopt;
+    }
+
+    if (key == current->key) {//Return value of current node
+        return current->value;
+    } else if (key < current->key) {//Go left
+        return get(current->left, key);
+    } else if (key > current-> key) {//Go right
+        return get(current->right, key);
     }
 }

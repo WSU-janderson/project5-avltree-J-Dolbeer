@@ -65,6 +65,7 @@ friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
 
     bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value);
     bool AVLTree::contains(AVLNode* current, const std::string& key) const;
+    std::optional<size_t> AVLTree::get(AVLNode* current, const std::string& key) const;
 };
 
 #endif //AVLTREE_H

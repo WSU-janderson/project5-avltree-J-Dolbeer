@@ -119,3 +119,20 @@ bool AVLTree::remove(AVLNode*& current, KeyType key) {
 
     return removed;
 }
+
+bool AVLTree::contains(const std::string& key) const {
+    return contains(root, key);
+}
+
+bool AVLTree::contains(AVLNode* current, const std::string& key) const {
+    if (!current) {
+        return false;
+    }
+    if (key == current->key) {
+        return true;
+    } else if (key < current->key) {
+        return contains(current->left, key);
+    } else if (key > current-> key){
+        return contains(current->right, key);
+    }
+}

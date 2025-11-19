@@ -64,6 +64,7 @@ friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
     void balanceNode(AVLNode*& node);
 
     bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value);
+    bool AVLTree::contains(AVLNode* current, const std::string& key) const;
 };
 
 #endif //AVLTREE_H

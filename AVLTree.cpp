@@ -174,25 +174,41 @@ vector<std::string> AVLTree::findRange(const std::string& lowKey, const std::str
 }
 
 vector<std::string> AVLTree::findRange(AVLNode* current, const std::string& lowKey, const std::string& highKey) const {
-    vector<std::string> keys;
+    vector<std::string> keysRange;
     if (!current) {//If node does not exist, return empty vector
-        return keys;
+        return keysRange;
     }
 
     if (current->key > lowKey) {//Go left
         vector<std::string> keysToLeft = findRange(current->left, lowKey, highKey);
-        keys.insert(keys.end(), keysToLeft.begin(), keysToLeft.end());
+        keysRange.insert(keysRange.end(), keysToLeft.begin(), keysToLeft.end());
     }
 
     if (current->key >= lowKey && current->key <= highKey) {//Add current key
-        keys.push_back(current->key);
+        keysRange.push_back(current->key);
     }
 
     if (current->key < highKey) {//Go right
         vector<std::string> keysToRight = findRange(current->right, lowKey, highKey);
-        keys.insert(keys.end(), keysToRight.begin(), keysToRight.end());
+        keysRange.insert(keysRange.end(), keysToRight.begin(), keysToRight.end());
     }
 
-    return keys;
+    return keysRange;
+}
+
+std::vector<std::string> AVLTree::keys() const {
+    std::vector<std::string> keyList;
+    keys(root, keyList);
+    return keyList;
+}
+
+void AVLTree::keys(AVLNode* current, std::vector<std::string>& keyList) const {
+    if (!current) {
+        return;
+    }
+
+    keys(current->left, keyList);
+    keyList.push_back(current->key);
+    keys(current->right, keyList);
 }
 

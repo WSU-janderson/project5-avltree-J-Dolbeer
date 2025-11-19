@@ -68,6 +68,7 @@ friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
     std::optional<size_t> AVLTree::get(AVLNode* current, const std::string& key) const;
     size_t& AVLTree::operatorHelper(AVLNode*& current, const std::string& key);
     vector<std::string> AVLTree::findRange(AVLNode* current, const std::string& lowKey, const std::string& highKey) const;
+    void AVLTree::keys(AVLNode* current, std::vector<std::string>& keyList) const;
 };
 
 #endif //AVLTREE_H

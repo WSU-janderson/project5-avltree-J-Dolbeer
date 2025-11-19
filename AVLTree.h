@@ -63,6 +63,7 @@ friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
     // You will implement this, but it is needed for removeNode()
     void balanceNode(AVLNode*& node);
 
+    size_t nodeCounter = 0;
     bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value);
     bool AVLTree::contains(AVLNode* current, const std::string& key) const;
     std::optional<size_t> AVLTree::get(AVLNode* current, const std::string& key) const;

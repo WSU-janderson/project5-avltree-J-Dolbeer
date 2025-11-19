@@ -88,6 +88,7 @@ bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value) {
     if (inserted) {//Get height and balance tree
         current->height = current->getHeight();
         balanceNode(current);
+        nodeCounter++;
     }
 
     return inserted;
@@ -115,6 +116,7 @@ bool AVLTree::remove(AVLNode*& current, KeyType key) {
     if (removed) {//Get height and balance tree
         current->height = current->getHeight();
         balanceNode(current);
+        nodeCounter--;
     }
 
     return removed;
@@ -212,3 +214,6 @@ void AVLTree::keys(AVLNode* current, std::vector<std::string>& keyList) const {
     keys(current->right, keyList);
 }
 
+size_t AVLTree::size() const {
+    return nodeCounter;
+}

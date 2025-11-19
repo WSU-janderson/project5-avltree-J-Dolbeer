@@ -89,6 +89,11 @@ bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value) {
         current->height = current->getHeight();
         balanceNode(current);
         nodeCounter++;
+        if (root) {
+            heightCounter = root->height;
+        } else {
+            heightCounter = 0;
+        }
     }
 
     return inserted;
@@ -117,6 +122,11 @@ bool AVLTree::remove(AVLNode*& current, KeyType key) {
         current->height = current->getHeight();
         balanceNode(current);
         nodeCounter--;
+        if (root) {
+            heightCounter = root->height;
+        } else {
+            heightCounter = 0;
+        }
     }
 
     return removed;
@@ -216,4 +226,8 @@ void AVLTree::keys(AVLNode* current, std::vector<std::string>& keyList) const {
 
 size_t AVLTree::size() const {
     return nodeCounter;
+}
+
+size_t AVLTree::getHeight() const {
+    return heightCounter;
 }

@@ -88,8 +88,8 @@ bool AVLTree::insert(AVLNode*& current, const std::string& key, size_t value) {
     if (inserted) {//Get height and balance tree
         current->height = current->getHeight();
         balanceNode(current);
-        nodeCounter++;
-        if (root) {
+        nodeCounter++;//Add node to nodeCounter
+        if (root) {//If root exists, update heightCounter
             heightCounter = root->height;
         } else {
             heightCounter = 0;
@@ -121,8 +121,8 @@ bool AVLTree::remove(AVLNode*& current, KeyType key) {
     if (removed) {//Get height and balance tree
         current->height = current->getHeight();
         balanceNode(current);
-        nodeCounter--;
-        if (root) {
+        nodeCounter--; //Remove node from nodeCounter
+        if (root) {//If root exists, update heightCounter
             heightCounter = root->height;
         } else {
             heightCounter = 0;
@@ -231,3 +231,20 @@ size_t AVLTree::size() const {
 size_t AVLTree::getHeight() const {
     return heightCounter;
 }
+
+AVLTree::AVLTree(const AVLTree& other) {
+    root = deepCopy(other.root);
+    nodeCounter = other.nodeCounter;
+    heightCounter = other.heightCounter;
+}
+
+AVLTree::AVLNode* AVLTree::deepCopy(AVLNode* current) {
+    if (!current) {
+        return nullptr;
+    }
+    AVLNode* newNode = new AVLNode{current->key, current->value, current->height, nullptr, nullptr};
+    newNode->left = deepCopy(current->left);
+    newNode->right = deepCopy(current->right);
+    return newNode;
+}
+

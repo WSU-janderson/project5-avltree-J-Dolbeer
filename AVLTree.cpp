@@ -5,15 +5,44 @@
 using std::ostream;
 
 size_t AVLTree::AVLNode::numChildren() const {
-    return 0;
+    size_t childrenCounter = 0;
+    if (left) {
+        childrenCounter++;
+    }
+    if (right) {
+        childrenCounter++;
+    }
+    return childrenCounter;
 }
 
 bool AVLTree::AVLNode::isLeaf() const {
-    return false;
+    bool hasLeftChild = (left != nullptr);
+    bool hasRightChild = (right != nullptr);
+    if (!hasLeftChild && !hasRightChild) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 size_t AVLTree::AVLNode::getHeight() const {
-    return 0;
+    size_t leftHeight;
+    size_t rightHeight;
+    if (left != nullptr) {
+        leftHeight = left->getHeight();
+    } else {
+        leftHeight = 0;
+    }
+    if (right != nullptr) {
+        rightHeight = right->getHeight();
+    } else {
+        rightHeight = 0;
+    }
+    if (leftHeight > rightHeight) {
+        return leftHeight + 1;
+    } else {
+        return rightHeight + 1;
+    }
 }
 
 bool AVLTree::removeNode(AVLNode*& current){
@@ -60,11 +89,100 @@ bool AVLTree::removeNode(AVLNode*& current){
     return true;
 }
 
-bool AVLTree::remove(AVLNode *&current, KeyType key) {
-    return false;
+void AVLTree::balanceNode(AVLNode *&node) {
+    if (!node) {
+        return;
+    }
+    node->height = node->getHeight();
+
+    int balanceFactor = 0;
+    int leftHeight = 0;
+    int rightHeight = 0;
+    if (node->left) {
+        leftHeight = node->left->getHeight();
+    } else {
+        leftHeight = 0;
+    }
+
+    if (node->right) {
+        rightHeight = node->right->getHeight();
+    } else {
+        rightHeight = 0;
+    }
+    balanceFactor = leftHeight - rightHeight;
+
+    if (balanceFactor > 1) {
+        int leftLeftHeight = 0;
+        int leftRightHeight = 0;
+        if (node->left->left) {
+            leftLeftHeight = node->left->left->getHeight();
+        } else {
+            leftLeftHeight = 0;
+        }
+        if (node->left->right) {
+            leftRightHeight = node->left->right->getHeight();
+        } else {
+            leftRightHeight = 0;
+        }
+        int leftBalance = leftLeftHeight - leftRightHeight; 
+
+        if (leftBalance >= 0) {
+            rotateRight(node);
+        } else {
+            rotateLeft(node->left);
+            rotateRight(node);
+        }
+    } else if (balanceFactor < -1) {
+        int rightLeftHeight = 0;
+        int rightRightHeight = 0;
+
+        if (node->right->left) {
+            rightLeftHeight = node->right->left->getHeight();
+        } else {
+            rightLeftHeight = 0;
+        }
+        if (node->right->right) {
+            rightRightHeight = node->right->right->getHeight();
+        } else {
+            rightRightHeight = 0;
+        }
+        int rightBalance = rightLeftHeight - rightRightHeight;
+
+        if (rightBalance <= 0) {
+            rotateLeft(node);
+        } else {
+            rotateRight(node->right);
+            rotateLeft(node);
+        }
+    }
+
+    node->height = node->getHeight();
 }
 
-void AVLTree::balanceNode(AVLNode *&node) {
+void AVLTree::rotateLeft(AVLNode*& node) {
+    if (!node || !node->right) {
+        return;
+    }
+    AVLNode* newRoot = node->right;
+    AVLNode* newNewRoot = newRoot->left;
+    newRoot->left = node;
+    node->right = newNewRoot;
+    node = newRoot;
+    root->right->height = root->right->getHeight();
+    root->height = root->getHeight();
+}
+
+void AVLTree::rotateRight(AVLNode*& node) {
+    if (!node || !node->left) {
+        return;
+    }
+    AVLNode* newRoot = node->left;
+    AVLNode* newNewRoot = newRoot->right;
+    newRoot->right = node;
+    node->left = newNewRoot;
+    node = newRoot;
+    root->left->height = root->left->getHeight();
+    root->height = root->getHeight();
 }
 
 bool AVLTree::insert(const std::string& key, size_t value) {
@@ -274,15 +392,18 @@ AVLTree::~AVLTree() {
 }
 
 std::ostream& operator<<(ostream& os, const AVLTree & avlTree) {
-    avlTree.printTree(os, avlTree.root);
+    avlTree.printTree(os, avlTree.root, 0);
     return os;
 }
 
-void AVLTree::printTree(std::ostream& os, AVLNode* current) const {
+void AVLTree::printTree(std::ostream& os, AVLNode* current, int depth) const {
     if (!current) {
         return;
     }
-    printTree(os, current->left);
-    os << current->key << ": " << current->value << "\n";
-    printTree(os, current->right);
+    printTree(os, current->right, depth + 1);
+    for (int i = 0; i < depth; i++) {
+        os << "   ";
+    }
+    os << "{" << current->key << ": " << current->value << "}\n";
+    printTree(os, current->left, depth + 1);
 }

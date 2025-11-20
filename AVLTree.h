@@ -73,6 +73,7 @@ friend std::ostream& operator<<(ostream& os, const AVLTree & avlTree);
     void AVLTree::keys(AVLNode* current, std::vector<std::string>& keyList) const;
     AVLTree::AVLNode* AVLTree::deepCopy(AVLNode* current);
     void AVLTree::erase(AVLNode* current);
+    void printTree(std::ostream& os, AVLNode* current) const;
 };
 
 #endif //AVLTREE_H

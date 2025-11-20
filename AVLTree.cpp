@@ -1,6 +1,8 @@
 #include "AVLTree.h"
 
 #include <string>
+#include <iostream>
+using std::ostream;
 
 size_t AVLTree::AVLNode::numChildren() const {
     return 0;
@@ -265,4 +267,22 @@ void AVLTree::erase(AVLNode* current) {
     erase(current->left);
     erase(current->right);
     delete current;
+}
+
+AVLTree::~AVLTree() {
+    erase(root);
+}
+
+std::ostream& operator<<(ostream& os, const AVLTree & avlTree) {
+    avlTree.printTree(os, avlTree.root);
+    return os;
+}
+
+void AVLTree::printTree(std::ostream& os, AVLNode* current) const {
+    if (!current) {
+        return;
+    }
+    printTree(os, current->left);
+    os << current->key << ": " << current->value << "\n";
+    printTree(os, current->right);
 }

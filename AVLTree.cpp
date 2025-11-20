@@ -248,3 +248,21 @@ AVLTree::AVLNode* AVLTree::deepCopy(AVLNode* current) {
     return newNode;
 }
 
+void AVLTree::operator=(const AVLTree& other) {
+    if (this == &other) {
+        return;
+    }
+    erase(root);
+    root = deepCopy(other.root);
+    nodeCounter = other.nodeCounter;
+    heightCounter = other.heightCounter;
+}
+
+void AVLTree::erase(AVLNode* current) {
+    if (!current) {
+        return;
+    }
+    erase(current->left);
+    erase(current->right);
+    delete current;
+}
